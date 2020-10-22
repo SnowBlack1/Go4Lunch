@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/map_view_tab"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="@string/map_view_tab"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/list_view_tab"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_list_24"
+        android:title="@string/list_view_tab"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/workmates_tab"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_people_alt_24"
+        android:title="@string/workmates_tab"
+        app:showAsAction="ifRoom"/>
+
+
+</menu>
