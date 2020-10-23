@@ -1,11 +1,22 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
+
+    <!-- BOTTOM NAVIGATION VIEW TABS -->
     <string name="map_view_tab">Map View</string>
     <string name="list_view_tab">List View</string>
     <string name="workmates_tab">Workmates</string>
+
+    <!-- BOTTOM NAVIGATION VIEW -->
     <string name="your_lunch">YOUR LUNCH</string>
     <string name="settings">SETTINGS</string>
     <string name="logout">LOGOUT</string>
+
+    <!--NAVIGATION DRAWER-->
     <string name="nav_drawer_open">Open Navigation Drawer</string>
     <string name="nav_drawer_close">Close Navigation Drawer</string>
+
+
+    <!-- NAVIGATION HEADER -->
+    <string name="navigation_header_user_name">Name</string>
+    <string name="navigation_header_user_email">Email</string>
 </resources>

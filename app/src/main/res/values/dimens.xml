@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="nav_header_height">250dp</dimen>
+
+    <!-- NAVIGATION DRAWER -->
+    <dimen name="nav_drawer_size_header">300dp</dimen>
+    <dimen name="nav_drawer_size_title">40sp</dimen>
+    <dimen name="nav_drawer_size_name">16sp</dimen>
+    <dimen name="nav_drawer_size_email">12sp</dimen>
+    <dimen name="nav_drawer_marginTop_title">50dp</dimen>
+
+    <!-- NAVIGATION HEADER -->
+    <dimen name="nav_header_margin_default">45dp</dimen>
+    <dimen name="nav_header_margin_image">32dp</dimen>
+    <dimen name="nav_header_margin_txt">8dp</dimen>
 </resources>
