@@ -2,10 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_header"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
-    android:background="@color/colorAccent">
+    android:layout_height="@dimen/nav_header_height">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="400dp"
+        android:layout_height="250dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/dinner_workmates_blurred"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/nav_header_title_txt"
@@ -22,15 +30,16 @@
         android:id="@+id/nav_header_image_view"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/ic_baseline_person_24"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="@dimen/nav_header_margin_image"
+        android:layout_marginBottom="@dimen/nav_header_margin_image"
         android:background="@color/notSelectedTabColor"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_baseline_person_24"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nav_header_title_txt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="@dimen/nav_header_margin_image"
-        android:layout_marginTop="@dimen/nav_header_margin_image"
-        android:layout_marginStart="@dimen/nav_header_margin_default"
-        android:contentDescription="@null" />
+        app:layout_constraintVertical_bias="0.333" />
 
     <TextView
         android:id="@+id/nav_header_name_txt"
