@@ -19,4 +19,9 @@
     <!-- NAVIGATION HEADER -->
     <string name="navigation_header_user_name">Name</string>
     <string name="navigation_header_user_email">Email</string>
+
+    <!--LOGIN ACTIVITY-->
+    <string name="login_activity_catchphrase">Find a nice restaurant and invite your co-workers for lunch!</string>
+    <string name="sign_in_google">Sign in with Google</string>
+    <string name="sign_in_facebook">Sign in with Facebook</string>
 </resources>

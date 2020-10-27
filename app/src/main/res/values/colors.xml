@@ -7,4 +7,6 @@
     <color name="notSelectedTabColor">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="nav_drawer_menu">#FF8A50</color>
+    <color name="facebook_connect_color">#507CC0</color>
+    <color name="google_connect_color">#DF4930</color>
   </resources>

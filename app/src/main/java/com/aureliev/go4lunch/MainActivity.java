@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.aureliev.go4lunch.fragments.ListViewFragment;
+import com.aureliev.go4lunch.fragments.MapsViewFragment;
+import com.aureliev.go4lunch.fragments.WorkmatesFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
