@@ -8,12 +8,15 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.aureliev.go4lunch.fragments.ListViewFragment;
 import com.aureliev.go4lunch.fragments.MapsViewFragment;
 import com.aureliev.go4lunch.fragments.WorkmatesFragment;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -22,6 +25,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+
+    //Identify each Http Request
+    private static final int SIGN_OUT_TASK = 10;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_drawer_settings:
                 break;
             case R.id.nav_drawer_logout:
+                signOutUserFromFirebase();
                 break;
             default:
                 break;
@@ -107,6 +115,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+
+
+    private void signOutUserFromFirebase() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+
+        //backToLoginActivityWhenLogout();
+
+    }
+
+    private void backToLoginActivityWhenLogout() {
+        Intent LoginActivity = new Intent(MainActivity.this, com.aureliev.go4lunch.LoginActivity.class);
+        startActivity(LoginActivity);
+    }
+
+
+    //Create OnCompleteListener called after tasks ended
+    private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin) {
+        return new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                switch (origin) {
+                    case SIGN_OUT_TASK:
+                        finish();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
     }
 }
 

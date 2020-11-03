@@ -24,4 +24,9 @@
     <string name="login_activity_catchphrase">Find a nice restaurant and invite your co-workers for lunch!</string>
     <string name="sign_in_google">Sign in with Google</string>
     <string name="sign_in_facebook">Sign in with Facebook</string>
+    <string name="connection_succeed">Connexion réussie !</string>
+    <string name="error_authentication_canceled">L\'authentification a été annulée</string>
+    <string name="error_no_internet">Pas de connexion internet</string>
+    <string name="error_unknown_error">Erreur inconnue</string>
+
 </resources>
