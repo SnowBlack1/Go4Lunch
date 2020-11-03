@@ -9,7 +9,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.aureliev.go4lunch.fragments.ListViewFragment;
@@ -19,6 +24,9 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView mBottomNavigationView;
@@ -45,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureToolbar();
         configureDrawerLayout();
         configureNavigationView();
+
+
     }
 
 

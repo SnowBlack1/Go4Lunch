@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Go4Lunch</string>
 
     <!-- BOTTOM NAVIGATION VIEW TABS -->
@@ -28,5 +28,10 @@
     <string name="error_authentication_canceled">L\'authentification a été annulée</string>
     <string name="error_no_internet">Pas de connexion internet</string>
     <string name="error_unknown_error">Erreur inconnue</string>
+
+    <!--FACEBOOK-->
+    <string name="facebook_application_id" translatable="false">283527966216644</string>
+    <string name="facebook_login_protocol_scheme" translatable="false"
+        tools:ignore="UnusedResources">fb283527966216644</string>
 
 </resources>
