@@ -1,4 +1,4 @@
-package com.aureliev.go4lunch;
+package com.aureliev.go4lunch.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -9,30 +9,35 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.aureliev.go4lunch.R;
+import com.aureliev.go4lunch.ViewModel;
 import com.aureliev.go4lunch.fragments.ListViewFragment;
 import com.aureliev.go4lunch.fragments.MapsViewFragment;
 import com.aureliev.go4lunch.fragments.WorkmatesFragment;
+import com.aureliev.go4lunch.model.User;
+//import com.bumptech.glide.Glide;
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView mBottomNavigationView;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private User currentUser;
+    private ViewModel mViewModel;
 
     //Identify each Http Request
     private static final int SIGN_OUT_TASK = 10;
@@ -54,9 +59,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureDrawerLayout();
         configureNavigationView();
 
+        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        //Log.e("","TEST POUR SAVOIR");
+        //if (user != null){
+        //    String userName = user.getDisplayName();
+        //    TextView headerName = findViewById(R.id.nav_header_name_txt);
+        //    headerName.setText(userName);
+        //}
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -99,6 +116,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
+   //private void getCurrentUser() {
+   //    String uidUser = FirebaseAuth.getInstance().getUid();
+   //    this.mViewModel.getUserCurrentMutableLiveData(uidUser).observe(this, user -> {
+   //        updateNavigationHeader(user);
+   //        currentUser = user;
+   //    });
+   //}
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -129,17 +154,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void signOutUserFromFirebase() {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+        AuthUI.getInstance().signOut(this);
+                //.addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
 
-        //backToLoginActivityWhenLogout();
+        backToLoginActivityWhenLogout();
 
     }
 
     private void backToLoginActivityWhenLogout() {
-        Intent LoginActivity = new Intent(MainActivity.this, com.aureliev.go4lunch.LoginActivity.class);
+        Intent LoginActivity = new Intent(MainActivity.this, com.aureliev.go4lunch.activities.LoginActivity.class);
         startActivity(LoginActivity);
+    }
+
+    private void updateNavigationHeader(User currentUser) {
+        final View headerView = mNavigationView.getHeaderView(0);
+        TextView nameUser = headerView.findViewById(R.id.nav_header_name_txt);
+        TextView emailUser = headerView.findViewById(R.id.nav_header_email_txt);
+        ImageView illustrationUser = headerView.findViewById(R.id.nav_header_image_view);
+        nameUser.setText(currentUser.getName());
+        emailUser.setText(currentUser.getEmail());
+        if (currentUser.getProfilePicture() != null)
+        {
+            Glide.with(this).load(currentUser.getProfilePicture()).circleCrop().into(illustrationUser);
+        }
     }
 
 
