@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -25,7 +26,11 @@ import com.aureliev.go4lunch.model.User;
 //import com.bumptech.glide.Glide;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,8 +41,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private TextView userNameTextView;
+    private TextView userEmailTextView;
+    private ImageView userImage;
     private User currentUser;
-    private ViewModel mViewModel;
 
     //Identify each Http Request
     private static final int SIGN_OUT_TASK = 10;
@@ -47,6 +54,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        View header = ((NavigationView) findViewById(R.id.navigation_view)).getHeaderView(0);
+        userNameTextView = header.findViewById(R.id.nav_header_name_txt);
+        userEmailTextView = header.findViewById(R.id.nav_header_email_txt);
+        userImage = header.findViewById(R.id.nav_header_image_view);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         mBottomNavigationView = findViewById(R.id.bottom_navigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -59,13 +72,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureDrawerLayout();
         configureNavigationView();
 
-        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        //Log.e("","TEST POUR SAVOIR");
-        //if (user != null){
-        //    String userName = user.getDisplayName();
-        //    TextView headerName = findViewById(R.id.nav_header_name_txt);
-        //    headerName.setText(userName);
-        //}
+
+        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        if (googleSignInAccount != null) {
+            //userNameTextView= header.findViewById(R.id.nav_header_name_txt);
+            userNameTextView.setText(googleSignInAccount.getDisplayName());
+            //TextView userEmail = header.findViewById(R.id.nav_header_email_txt);
+            userEmailTextView.setText(googleSignInAccount.getEmail());
+
+            //ImageView imageView =header.findViewById(R.id.nav_header_image_view);
+            if (googleSignInAccount.getPhotoUrl() != null) {
+                Glide.with(this).load(googleSignInAccount.getPhotoUrl()).circleCrop().into(userImage);
+            } else {
+                userImage.setVisibility(View.GONE);
+            }
+        }
+        if (user != null) {
+            String userName = user.getDisplayName();
+            //userNameTextView = header.findViewById(R.id.nav_header_name_txt);
+            userNameTextView.setText(userName);
+
+            String userEmail = user.getEmail(); //mon email FB ne s'affiche pas. getUid affiche bien l'uid
+            //TextView userEmailTextView = findViewById(R.id.nav_header_email_txt);
+            userEmailTextView.setText(userEmail);
+
+            String urlPicture = user.getPhotoUrl().toString(); //mon image profil FB ne s'affiche pas, image FB par défaut
+            //ImageView userImage = findViewById(R.id.nav_header_image_view);
+            Glide.with(MainActivity.this).load(urlPicture).circleCrop()
+                    //.placeholder(spinner?)
+                    .into(userImage);
+        }
 
     }
 
@@ -116,13 +152,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
-   //private void getCurrentUser() {
-   //    String uidUser = FirebaseAuth.getInstance().getUid();
-   //    this.mViewModel.getUserCurrentMutableLiveData(uidUser).observe(this, user -> {
-   //        updateNavigationHeader(user);
-   //        currentUser = user;
-   //    });
-   //}
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -154,10 +183,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void signOutUserFromFirebase() {
-        AuthUI.getInstance().signOut(this);
-                //.addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+        //FirebaseAuth.getInstance().signOut();
+        AuthUI.getInstance()
+                .signOut(MainActivity.this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
 
-        backToLoginActivityWhenLogout();
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        // do something here
+
+                    }
+                });
+        finish();
+
 
     }
 
@@ -173,8 +212,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView illustrationUser = headerView.findViewById(R.id.nav_header_image_view);
         nameUser.setText(currentUser.getName());
         emailUser.setText(currentUser.getEmail());
-        if (currentUser.getProfilePicture() != null)
-        {
+        if (currentUser.getProfilePicture() != null) {
             Glide.with(this).load(currentUser.getProfilePicture()).circleCrop().into(illustrationUser);
         }
     }

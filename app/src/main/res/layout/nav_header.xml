@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_header"
@@ -12,19 +11,19 @@
         android:layout_height="250dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/dinner_workmates_blurred"
+        app:srcCompat="@drawable/dinner_workmates_darken_blurred"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/nav_header_title_txt"
+        style="@style/nav_drawer_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/nav_drawer_title"
+        android:layout_marginTop="@dimen/nav_header_margin_default"
         android:text="@string/app_name"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/nav_header_margin_default"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/nav_header_image_view"
@@ -43,30 +42,28 @@
 
     <TextView
         android:id="@+id/nav_header_name_txt"
+        style="@style/nav_drawer_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/nav_drawer_name"
-        android:textAllCaps="false"
-        android:layout_marginTop="@dimen/nav_header_margin_txt"
-        app:layout_constraintStart_toEndOf="@id/nav_header_image_view"
-        app:layout_constraintTop_toTopOf="@id/nav_header_image_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="@dimen/nav_header_margin_txt"
         android:layout_marginStart="@dimen/nav_header_margin_txt"
-        android:text="@string/navigation_header_user_name"
-        android:background="@color/nav_drawer_menu"/>
+        android:layout_marginTop="@dimen/nav_header_margin_txt"
+        android:layout_marginEnd="@dimen/nav_header_margin_txt"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/nav_header_image_view"
+        app:layout_constraintTop_toTopOf="@id/nav_header_image_view" />
 
     <TextView
         android:id="@+id/nav_header_email_txt"
+        style="@style/nav_drawer_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/nav_drawer_email"
-        android:textAllCaps="false"
         android:background="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@id/nav_header_name_txt"
-        app:layout_constraintStart_toStartOf="@id/nav_header_name_txt"
+        android:text="@string/navigation_header_user_email"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="@id/nav_header_name_txt"
-        android:text="@string/navigation_header_user_email"/>
+        app:layout_constraintStart_toStartOf="@id/nav_header_name_txt"
+        app:layout_constraintTop_toBottomOf="@id/nav_header_name_txt" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
