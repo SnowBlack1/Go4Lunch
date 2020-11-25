@@ -226,7 +226,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
         //Il faut gérer les requestCode qui sont différents de celui de Google
             //Facebook aura toujours un requestcode différent
-            mCallbackManager.onActivityResult(requestCode, resultCode, data); //PB WHEN GOOGLE LOGIN?????????????????????????????????????????????????
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
             //Ca ça sert pour le cas de email donc tu n'en a pas besoin ici sauf si tu rajoutes le bouton
             // dans ce cas il faudra que tu crée un nouveau RC_SIGN_IN_EMAIL par exemple pour le
@@ -296,6 +296,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    //EMAIL
     // Method that handles response after SignIn Activity close
     private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
