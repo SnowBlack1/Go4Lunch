@@ -31,7 +31,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation platform('com.google.firebase:firebase-bom:26.0.0')
-     //EMAIL_PROVIDER etc, ne fonctionnent pas
     implementation 'com.firebaseui:firebase-ui-auth:3.1.3'
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
