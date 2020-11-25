@@ -34,4 +34,9 @@
     <string name="facebook_login_protocol_scheme" translatable="false"
         tools:ignore="UnusedResources">fb283527966216644</string>
 
+    <!--TWITTER-->
+    <string name="twitter_consumer_key" translatable="false">rvVbi56118erPbKlrwVhFziol</string>
+    <string name="twitter_consumer_secret" translatable="false">XOgldy1m4Hve5TtOR62XCaauigY7nJrehXyvqj0GtG2h04fzcG</string>
+    <string name="sign_in_twitter">Sign in with Twitter</string>
+
 </resources>

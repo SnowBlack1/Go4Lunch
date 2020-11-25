@@ -38,6 +38,16 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.TwitterAuthProvider;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.DefaultLogger;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import java.util.Arrays;
 
@@ -47,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoginManager mLoginManager;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
+    private TwitterLoginButton mTwitterLoginButton;
 
     //Identifier for Sign-In Activity
     private static final int RC_SIGN_IN = 123;
@@ -55,17 +66,40 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TwitterConfig twitterConfig = new TwitterConfig.Builder(this)
+                .logger(new DefaultLogger(Log.DEBUG))
+                .twitterAuthConfig(new TwitterAuthConfig(getString(R.string.twitter_consumer_key),
+                        getString(R.string.twitter_consumer_secret)))
+                .debug(true)
+                .build();
+        Twitter.initialize(twitterConfig);
+
+
         setContentView(R.layout.activity_login);
-
-        mAuth = FirebaseAuth.getInstance();
-
         loginActivityLayout = findViewById(R.id.login_activity_layout);
 
-        Button facebookConnectBtn = findViewById(R.id.facebook_connect_btn);
+        mAuth = FirebaseAuth.getInstance();
+        TwitterLoginButton mTwitterLoginButton = findViewById(R.id.twitter_login_btn);
+
+        mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                //Do smth w/ result, which provides a TwitterSession for making API calls
+                //mettre toast ?
+                signInToFirebaseWithTwitterSession(result.data);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                //Do smth on failure
+            }
+        });
+
+
+        Button facebookConnectBtn = findViewById(R.id.facebook_login_btn);
         AppEventsLogger.activateApp(getApplication());
         //FacebookSdk.sdkInitialize(getApplicationContext()); //DEPRECATED
-
-
         facebookConnectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        Button googleConnectBtn = findViewById(R.id.google_connect_btn);
+        Button googleConnectBtn = findViewById(R.id.google_login_btn);
         googleConnectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -178,21 +212,57 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        mCallbackManager.onActivityResult(requestCode, resultCode, data); //PB WHEN GOOGLE LOGIN?????????????????????????????????????????????????
-        handleResponseAfterSignIn(requestCode, resultCode, data);
-
         super.onActivityResult(requestCode, resultCode, data);
 
-// Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        //Log.d(TAG, "onActivityResult: " + requestCode);
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account.getIdToken());
-            } catch (ApiException e) {}
+            } catch (ApiException e) {
+            }
+        } else {
+        //Il faut gérer les requestCode qui sont différents de celui de Google
+            //Facebook aura toujours un requestcode différent
+            mCallbackManager.onActivityResult(requestCode, resultCode, data); //PB WHEN GOOGLE LOGIN?????????????????????????????????????????????????
+
+            //Ca ça sert pour le cas de email donc tu n'en a pas besoin ici sauf si tu rajoutes le bouton
+            // dans ce cas il faudra que tu crée un nouveau RC_SIGN_IN_EMAIL par exemple pour le
+            //différencier de Google
+            //            handleResponseAfterSignIn(requestCode, resultCode, data);
         }
 
     }
+
+    //@Override
+    //protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    //    super.onActivityResult(requestCode, resultCode, data);
+//
+    //    mCallbackManager.onActivityResult(requestCode, resultCode, data); //PB WHEN GOOGLE LOGIN????
+    //    mTwitterLoginButton.onActivityResult(requestCode,resultCode,data);
+    //    handleResponseAfterSignIn(requestCode, resultCode, data);
+//
+    //    //Meme en changeant l183 de place, mCallbackManager == null when login google first
+//
+    //    //if (mCallbackManager==null){
+    //    // mCallbackManager= CallbackManagerImpl@5555;
+    //    //}
+//
+//
+//
+    //    // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+    //    if (requestCode == RC_SIGN_IN) {
+    //        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+    //        try {
+    //            GoogleSignInAccount account = task.getResult(ApiException.class);
+    //            firebaseAuthWithGoogle(account.getIdToken());
+    //        } catch (ApiException e) {
+    //        }
+    //    }
+//
+    //}
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
@@ -210,6 +280,21 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    private void signInToFirebaseWithTwitterSession(TwitterSession session) {
+        AuthCredential credential = TwitterAuthProvider.getCredential(session.getAuthToken().token,
+                session.getAuthToken().secret);
+
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Toast.makeText(LoginActivity.this, "Signed in firebase twitter successful", Toast.LENGTH_LONG).show();
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Auth firebase twitter failed", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
 
     // Method that handles response after SignIn Activity close
     private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data) {

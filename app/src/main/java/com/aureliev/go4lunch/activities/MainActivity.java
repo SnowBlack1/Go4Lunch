@@ -4,26 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.aureliev.go4lunch.R;
-import com.aureliev.go4lunch.ViewModel;
 import com.aureliev.go4lunch.fragments.ListViewFragment;
 import com.aureliev.go4lunch.fragments.MapsViewFragment;
 import com.aureliev.go4lunch.fragments.WorkmatesFragment;
 import com.aureliev.go4lunch.model.User;
-//import com.bumptech.glide.Glide;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -35,15 +29,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.twitter.sdk.android.core.SessionManager;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterSession;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private BottomNavigationView mBottomNavigationView;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
-    private TextView userNameTextView;
-    private TextView userEmailTextView;
-    private ImageView userImage;
     private User currentUser;
 
     //Identify each Http Request
@@ -55,14 +47,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         View header = ((NavigationView) findViewById(R.id.navigation_view)).getHeaderView(0);
-        userNameTextView = header.findViewById(R.id.nav_header_name_txt);
-        userEmailTextView = header.findViewById(R.id.nav_header_email_txt);
-        userImage = header.findViewById(R.id.nav_header_image_view);
+        TextView userNameTextView = header.findViewById(R.id.nav_header_name_txt);
+        TextView userEmailTextView = header.findViewById(R.id.nav_header_email_txt);
+        ImageView userImage = header.findViewById(R.id.nav_header_image_view);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        mBottomNavigationView = findViewById(R.id.bottom_navigation);
-        mBottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
         //MapsViewFragment opens first when launch
         getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_frame_layout,
@@ -148,8 +140,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void configureNavigationView() {
-        this.mNavigationView = findViewById(R.id.navigation_view);
-        mNavigationView.setNavigationItemSelectedListener(this);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
 
@@ -184,6 +176,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void signOutUserFromFirebase() {
         //FirebaseAuth.getInstance().signOut();
+        SessionManager<TwitterSession> sessionManager = TwitterCore.getInstance().getSessionManager();
+        if ((sessionManager.getActiveSession() != null)){
+            sessionManager.clearActiveSession();
+            AuthUI.getInstance().signOut(MainActivity.this);
+        }
         AuthUI.getInstance()
                 .signOut(MainActivity.this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -199,24 +196,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
-
-    private void backToLoginActivityWhenLogout() {
-        Intent LoginActivity = new Intent(MainActivity.this, com.aureliev.go4lunch.activities.LoginActivity.class);
-        startActivity(LoginActivity);
-    }
-
-    private void updateNavigationHeader(User currentUser) {
-        final View headerView = mNavigationView.getHeaderView(0);
-        TextView nameUser = headerView.findViewById(R.id.nav_header_name_txt);
-        TextView emailUser = headerView.findViewById(R.id.nav_header_email_txt);
-        ImageView illustrationUser = headerView.findViewById(R.id.nav_header_image_view);
-        nameUser.setText(currentUser.getName());
-        emailUser.setText(currentUser.getEmail());
-        if (currentUser.getProfilePicture() != null) {
-            Glide.with(this).load(currentUser.getProfilePicture()).circleCrop().into(illustrationUser);
-        }
-    }
-
 
     //Create OnCompleteListener called after tasks ended
     private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin) {

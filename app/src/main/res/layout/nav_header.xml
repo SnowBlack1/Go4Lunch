@@ -27,9 +27,9 @@
 
     <ImageView
         android:id="@+id/nav_header_image_view"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="32dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="@dimen/nav_header_margin_image"
         android:layout_marginBottom="@dimen/nav_header_margin_image"
         android:background="@color/notSelectedTabColor"
@@ -58,7 +58,6 @@
         style="@style/nav_drawer_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
         android:text="@string/navigation_header_user_email"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="@id/nav_header_name_txt"
