@@ -44,4 +44,11 @@
     <style name="nav_drawer_email" parent="nav_drawer_txt">
         <item name="android:textSize">@dimen/nav_drawer_size_email</item>
     </style>
+
+    <style name="Go4LunchTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Go4LunchTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

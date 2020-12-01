@@ -30,12 +30,19 @@
     <string name="error_unknown_error">Erreur inconnue</string>
 
     <!--FACEBOOK-->
-    <string name="facebook_application_id" translatable="false">283527966216644</string>
-    <string name="facebook_login_protocol_scheme" translatable="false"
-        tools:ignore="UnusedResources">fb283527966216644</string>
+    <string name="facebook_application_id" translatable="false">385999599513198</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb385999599513198</string>
+
 
     <!--TWITTER-->
     <string name="twitter_consumer_key" translatable="false">rvVbi56118erPbKlrwVhFziol</string>
     <string name="sign_in_twitter">Sign in with Twitter</string>
+    <string name="sign_in_email">Sign in with email</string>
+    <string name="twitter_auth_provider">twitter.com</string>
+
+
+    <string name="auth_msg_sign_in_to_continue">Please sign in to continue.</string>
+    <string name="error_fail_auth">\"Echec de l\'authentification \"</string>
+    <string name="app_logo">app_logo</string>
 
 </resources>

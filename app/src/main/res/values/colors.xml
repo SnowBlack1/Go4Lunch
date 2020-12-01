@@ -10,4 +10,5 @@
     <color name="facebook_login_color">#507CC0</color>
     <color name="google_login_color">#DF4930</color>
     <color name="twitter_login_color">#1DA1F2</color>
+    <color name="email_login_color">#D0021B</color>
   </resources>

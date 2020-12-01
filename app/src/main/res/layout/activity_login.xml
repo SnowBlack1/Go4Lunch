@@ -55,7 +55,7 @@
             android:layout_width="325dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:background="@drawable/facebook_button_shape"
             android:drawableStart="@drawable/facebook_logo_white24"
             android:padding="12dp"
@@ -74,24 +74,17 @@
             android:text="@string/sign_in_google"
             android:textColor="@color/white" />
 
-        <com.twitter.sdk.android.core.identity.TwitterLoginButton
+        <Button
             android:id="@+id/twitter_login_btn"
             android:layout_width="325dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="25dp"
-            android:layout_gravity="center"/>
-
-<!--<com.twitter.sdk.android.core.identity.TwitterLoginButton
-    android:id="@+id/twitter_login_btn"
-    android:layout_width="325dp"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_marginTop="25dp"
-    android:background="@color/twitter_login_color"
-    android:drawableStart="@drawable/twitter_logo_white24"
-    android:padding="12dp"
-    android:text="@string/sign_in_twitter"
-    android:textColor="@color/white" />-->
+            android:background="@drawable/twitter_button_shape"
+            android:drawableStart="@drawable/fui_ic_twitter_bird_white_24dp"
+            android:padding="12dp"
+            android:text="@string/sign_in_twitter"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 </FrameLayout>

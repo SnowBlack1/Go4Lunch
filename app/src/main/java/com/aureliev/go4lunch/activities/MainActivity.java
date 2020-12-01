@@ -85,11 +85,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             userNameTextView.setText(userName);
 
             String userEmail = user.getEmail(); //mon email FB ne s'affiche pas. getUid affiche bien l'uid
-            //TextView userEmailTextView = findViewById(R.id.nav_header_email_txt);
             userEmailTextView.setText(userEmail);
 
             String urlPicture = user.getPhotoUrl().toString(); //mon image profil FB ne s'affiche pas, image FB par défaut
-            //ImageView userImage = findViewById(R.id.nav_header_image_view);
             Glide.with(MainActivity.this).load(urlPicture).circleCrop()
                     //.placeholder(spinner?)
                     .into(userImage);
@@ -104,26 +102,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    Fragment selectedFragment = null;
+            menuItem -> {
+                Fragment selectedFragment = null;
 
-                    switch (menuItem.getItemId()) {
-                        case R.id.map_view_tab:
-                            selectedFragment = new MapsViewFragment();
-                            break;
-                        case R.id.list_view_tab:
-                            selectedFragment = new ListViewFragment();
-                            break;
-                        case R.id.workmates_tab:
-                            selectedFragment = new WorkmatesFragment();
-                            break;
-                    }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_frame_layout,
-                            selectedFragment).commit();
-                    return true;
+                switch (menuItem.getItemId()) {
+                    case R.id.map_view_tab:
+                        selectedFragment = new MapsViewFragment();
+                        break;
+                    case R.id.list_view_tab:
+                        selectedFragment = new ListViewFragment();
+                        break;
+                    case R.id.workmates_tab:
+                        selectedFragment = new WorkmatesFragment();
+                        break;
                 }
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_frame_layout,
+                        selectedFragment).commit();
+                return true;
             };
 
     private void configureToolbar() {
@@ -176,11 +171,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void signOutUserFromFirebase() {
         //FirebaseAuth.getInstance().signOut();
-        SessionManager<TwitterSession> sessionManager = TwitterCore.getInstance().getSessionManager();
-        if ((sessionManager.getActiveSession() != null)){
-            sessionManager.clearActiveSession();
-            AuthUI.getInstance().signOut(MainActivity.this);
-        }
         AuthUI.getInstance()
                 .signOut(MainActivity.this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -212,6 +202,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
     }
+
+
 }
 
 
