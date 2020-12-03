@@ -60,12 +60,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
         loginActivityLayout = findViewById(R.id.login_activity_layout);
 
         mAuth = FirebaseAuth.getInstance();
-        mCallbackManager = CallbackManager.Factory.create();
 
         //Button emailLoginBtn = findViewById(R.id.email_login_btn);
         //emailLoginBtn.setOnClickListener(view -> signInWithEmailFirebase());
@@ -108,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void facebookLogin() {
+        mCallbackManager = CallbackManager.Factory.create();
         LoginManager loginManager = LoginManager.getInstance();
         loginManager.logInWithReadPermissions(LoginActivity.this, Arrays.asList(
                 "email", "public_profile"
@@ -177,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        //mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
@@ -188,16 +187,14 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
             }
-        } //else {
-            //Il faut gérer les requestCode qui sont différents de celui de Google
-            //Facebook aura toujours un requestcode différent
-           // mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        } else {
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
             //Ca ça sert pour le cas de email donc tu n'en a pas besoin ici sauf si tu rajoutes le bouton
             // dans ce cas il faudra que tu crée un nouveau RC_SIGN_IN_EMAIL par exemple pour le
             //différencier de Google
             //            handleResponseAfterSignIn(requestCode, resultCode, data);
-        //}
+        }
 
     }
 
@@ -216,22 +213,22 @@ public class LoginActivity extends AppCompatActivity {
 
     //EMAIL
 // Method that handles response after SignIn Activity close
-    private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data) {
-        IdpResponse response = IdpResponse.fromResultIntent(data);
-        if (requestCode == RC_SIGN_IN_GOOGLE) {
-            if (resultCode == RESULT_OK) { // SUCCESS
-                showSnackBar(this.loginActivityLayout, getString(R.string.connection_succeed));
-            } else { // ERRORS
-                if (response == null) {
-                    showSnackBar(this.loginActivityLayout, getString(R.string.error_authentication_canceled));
-                } else if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    showSnackBar(this.loginActivityLayout, getString(R.string.error_no_internet));
-                } else if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                    showSnackBar(this.loginActivityLayout, getString(R.string.error_unknown_error));
-                }
-            }
-        }
-    }
+    //private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data) {
+    //    IdpResponse response = IdpResponse.fromResultIntent(data);
+    //    if (requestCode == RC_SIGN_IN_GOOGLE) {
+    //        if (resultCode == RESULT_OK) { // SUCCESS
+    //            showSnackBar(this.loginActivityLayout, getString(R.string.connection_succeed));
+    //        } else { // ERRORS
+    //            if (response == null) {
+    //                showSnackBar(this.loginActivityLayout, getString(R.string.error_authentication_canceled));
+    //            } else if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
+    //                showSnackBar(this.loginActivityLayout, getString(R.string.error_no_internet));
+    //            } else if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+    //                showSnackBar(this.loginActivityLayout, getString(R.string.error_unknown_error));
+    //            }
+    //        }
+    //    }
+    //}
 
 
 

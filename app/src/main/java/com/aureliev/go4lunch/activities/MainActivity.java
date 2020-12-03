@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.aureliev.go4lunch.fragments.MapsViewFragment;
 import com.aureliev.go4lunch.fragments.WorkmatesFragment;
 import com.aureliev.go4lunch.model.User;
 import com.bumptech.glide.Glide;
+import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -148,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_drawer_lunch:
                 break;
             case R.id.nav_drawer_settings:
+                intentSettingsActivity();
                 break;
             case R.id.nav_drawer_logout:
                 signOutUserFromFirebase();
@@ -182,9 +185,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }
                 });
+        //LoginManager.getInstance().logOut();
         finish();
+    }
 
-
+    private void intentSettingsActivity(){
+        Intent SettingsActivity = new Intent(MainActivity.this, com.aureliev.go4lunch.activities.SettingsActivity.class);
+        startActivity(SettingsActivity);
     }
 
     //Create OnCompleteListener called after tasks ended
